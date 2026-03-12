@@ -53,12 +53,17 @@ jobs:
     - name: Update kubeconfig
       run: aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
 
+    - name: Apply Kubernetes Manifests
+      run: |
+        kubectl apply -f k8s/deployment.yaml
+        kubectl apply -f k8s/service.yaml
+
     - name: Deploy to EKS
       run: |
-       kubectl apply -f k8s/deployment.yaml
-       kubectl apply -f k8s/service.yaml
-       kubectl set image deployment/devops-deployment devops-container=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
-       kubectl rollout status deployment/devops-deployment
+        kubectl set image deployment/devops-deployment devops-container=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+        kubectl rollout status deployment/devops-deployment
 
-
-        
+    - name: Get LoadBalancer Endpoint
+      run: |
+        echo "LoadBalancer Endpoint:"
+        kubectl get svc devops-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
