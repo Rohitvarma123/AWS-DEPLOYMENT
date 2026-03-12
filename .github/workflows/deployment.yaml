@@ -57,3 +57,5 @@ jobs:
       run: |
         kubectl set image deployment/devops-deployment devops-container=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
         kubectl rollout status deployment/devops-deployment
+
+        
