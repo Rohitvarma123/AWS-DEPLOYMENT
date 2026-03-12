@@ -51,3 +51,20 @@ This web application displays lists of board games and their reviews. While anyo
   - username: bugs    |     password: bunny (user role)
   - username: daffy   |     password: duck  (manager role)
 5. You can also sign-up as a new user and customize your role to play with the application! 😊
+
+## Metrics (Prometheus + Grafana)
+
+This project exposes Prometheus metrics via Spring Boot Actuator at:
+
+- `http://localhost:8080/actuator/prometheus`
+- `http://localhost:8080/actuator/health`
+
+To run Prometheus + Grafana locally with Docker:
+
+1. Build the app jar (required for the current `Dockerfile`):
+   - `./mvnw -DskipTests package`
+2. Start the stack:
+   - `docker compose -f docker-compose.observability.yml up --build`
+3. Open:
+   - Prometheus: `http://localhost:9090`
+   - Grafana: `http://localhost:3000` (login `admin` / `admin`)
